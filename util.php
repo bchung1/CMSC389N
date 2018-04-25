@@ -1,10 +1,9 @@
 <?php
-function getEvents($db){
+function getEvents($db, $username){
 	$day = date('w');
 	$week_start = date('m-d-Y', strtotime('-'.$day.' days'));
 	$week_end = date('m-d-Y', strtotime('+'.(6-$day).' days'));
 
-	$username = "jake";
 	$events_query = "select * from events where Username = \"".$username."\"";
 	$events = mysqli_query($db, $events_query);
 	return $events;
@@ -30,19 +29,19 @@ function connectToDB($host, $user, $password, $database) {
 //     <body>
 //     	$body
 //     </body>
-//     </html> 
+//     </html>
 // EOPAGE;
 
 //     return $page;
 // }
 
-function convertDateToNum($date){ 
+function convertDateToNum($date){
 	$unixTimestamp = strtotime($date);
 	$dayOfWeek = date("l", $unixTimestamp);
 	$day_num = date('N', strtotime($dayOfWeek));
 	return $day_num;
 }
-function connectToSchedulerDB(){ 
+function connectToSchedulerDB(){
 	$host = "localhost";
 	$user = "dbuser";
 	$password = "cmsc389n";

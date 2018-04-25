@@ -14,7 +14,7 @@
         <div class="icon secondary chevron_left">‹</div>
         <h1 class="" style="flex: 1;"><span></span><strong>1 April – 7 April</strong> 2018</h1>
         <div class="icon secondary chevron_left">›</div>
-      </div> 
+      </div>
       <div style="align-self: flex-start; flex: 0 0 1"></div>
     </header>
 
@@ -36,14 +36,15 @@
         </thead>
       </table>
 
-      <div class="wrap"> 
+      <div class="wrap">
         <table class="offset">
 
           <tbody>
            <?php
+           session_start();
            require_once("util.php");
            $db = connectToSchedulerDB();
-           $events = getEvents($db);
+           $events = getEvents($db, $_SESSION['username']);
            $day = date('w');
            $week_start = date('m-d-Y', strtotime('-'.$day.' days'));
            $week_end = date('m-d-Y', strtotime('+'.(6-$day).' days'));
@@ -73,7 +74,7 @@
 
                 if($dueDateNum == $j && strtotime($time_formatted) >= strtotime($startTime) && strtotime($time_formatted) <= strtotime($endTime)){
                   $event_div = "<td><div class='event'><input id='check' type='checkbox' class='checkbox' /><label for='check'></label>".$name."</div></td>";
-                  
+
                 }
               }
               $event_row = $event_row.$event_div;
@@ -83,7 +84,7 @@
             $time = strtotime('+30 minutes', $time);
           }
 
-          
+
           ?>
         </tbody>
       </table>
