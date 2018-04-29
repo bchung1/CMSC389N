@@ -43,8 +43,8 @@ function convertDateToNum($date){
 }
 function connectToSchedulerDB(){
 	$host = "localhost";
-	$user = "root";
-	$password = "root";
+	$user = "dbuser";
+	$password = "cmsc389n";
 	$database = "scheduler";
 	$table = "events";
 	$db = connectToDB($host, $user, $password, $database);
