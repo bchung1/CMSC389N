@@ -40,6 +40,32 @@
   <table class="offset">
 
   <tbody>
+  	<script>
+  		function writeTable(time, id) {
+  			var timeString = "";
+
+  			if (time != undefined) {
+  				timeString = time.toString();
+  			}
+
+  			document.write("<tr>");
+    			document.write("<td id=\"" + id + "\" class=\"headcol\">" + timeString + "</td>");
+    			document.write("<td></td>");
+    			document.write("<td></td>");
+    			document.write("<td class=\"past\"></td>");
+    			document.write("<td></td>");
+    			document.write("<td></td>");
+    			document.write("<td></td>");
+    			document.write("<td></td>");
+    			document.write("</tr>");
+  		}
+
+    		for (var i = 0; i <= 24; i++) {
+    			var time = ((i % 12) == 0) ? 12 : i % 12;
+    			writeTable(time, i);
+    			writeTable(undefined, i);
+    		}
+    	</script>
     <tr>
       <td class="headcol"></td>
       <td></td>
@@ -113,7 +139,7 @@
     <tr>
       <td class="headcol">9:00</td>
       <td></td>
-      <td>dsadsad</td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
