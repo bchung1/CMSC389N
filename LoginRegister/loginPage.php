@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once("util.php");
+require_once("../util.php");
 $loginMessage = "";
 
 $table = "login";
@@ -9,21 +9,28 @@ $db = connectToSchedulerDB();
 if (isset($_POST['submit'])) {
     $username = trim($_POST['username']);
     $password = sha1(trim($_POST['password']));
-    $sqlQuery = "select * from $table where Username = '{$username}' AND Password = '{$password}'";
-    $result = mysqli_query($db, $sqlQuery);
-    if ($result) {
-        $numberOfRows = mysqli_num_rows($result);
-        if ($numberOfRows == 0) {
-            $loginMessage = "<strong>No entry exists in the database for the specified username and password</strong>";
-        } else {
-            $_SESSION['username'] = $username;
-            mysqli_free_result($result);
-            header("Location: calendar2.php");
-        }
-    } else {
-        $loginMessage = "Retrieving records failed." . mysqli_error($db);
+
+    if ($username == "" || $password == "") {
+        $loginMessage = "<br>No username or password entered";
     }
-    $loginMessage = "<br>Incorrect username or password";
+
+    else {
+        $sqlQuery = "select * from $table where Username = '{$username}' AND Password = '{$password}'";
+        $result = mysqli_query($db, $sqlQuery);
+        if ($result) {
+            $numberOfRows = mysqli_num_rows($result);
+            if ($numberOfRows == 0) {
+                $loginMessage = "<strong>No entry exists in the database for the specified username and password</strong>";
+            } else {
+                $_SESSION['username'] = $username;
+                mysqli_free_result($result);
+                header("Location: ../Calendar/calendar2.php");
+            }
+        } else {
+            $loginMessage = "Retrieving records failed." . mysqli_error($db);
+        }
+        $loginMessage = "<br>Incorrect username or password";
+    }
 }
 
 $form = <<<EOPAGE
@@ -33,7 +40,6 @@ $form = <<<EOPAGE
     <title>Login</title>
     <meta charset="utf-8" />
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-   <script type="text/javascript" src="loginPage.js"></script>
   </head>
   <body>
     <div class="container" style="margin-top:30px">
@@ -51,7 +57,7 @@ $form = <<<EOPAGE
                             <input type="password" class="form-control" style="border-radius:0px" id="password" name="password" placeholder="Enter password">
                         </div>
                         <input type="submit" name="submit" class="btn btn-sm btn-default"> &nbsp;
-                        Not a member yet? <a href="registerPage.php">Register</a> now
+                        Not a member yet? <a href="../registerPage.php">Register</a> now
                     </form>
 
 
