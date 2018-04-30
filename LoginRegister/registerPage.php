@@ -13,8 +13,6 @@ if (isset($_POST['submit'])){
     $sqlQuery .= "('{$username}', '{$password}')";
     $result = mysqli_query($db, $sqlQuery);
     header("Location: loginPage.php");
-
-    $loginMessage = "A";
 }
 
 $form = <<<EOPAGE
