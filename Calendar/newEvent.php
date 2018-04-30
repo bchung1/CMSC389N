@@ -1,55 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <title>Order Confirmation</title>
-</head>
+<?php
 
-<body>
+session_start();
+require_once("../util.php");
 
+$table = "events";
+$db = connectToSchedulerDB();
 
-
-
-<h1>Order Confirmation</h1>
-
-<div class="container-fluid">
-    <?php
-
-    session_start();
-    require_once("../util.php");
-    $loginMessage = "";
-
-    $table = "events";
-    $db = connectToSchedulerDB();
-
-    $sqlQuery = "insert into $table (username, tag, color, timediff, duedate, startdate, startime, endtime) values";
-    $sqlQuery .= "('{$_SESSION['username']}', '{$_POST['tag']}'), '{$_POST['color']}, '{$_POST['startime']}'";
-    $result = mysqli_query($db, $sqlQuery);
-    $startTime = new DateTime($_POST['startTime']);
-    $endTime = new DateTime($_POST['endTime']);
+$name = $_POST["name"];
+$username = $_SESSION["username"];
+$tag = $_POST["tag"];
+$color = $_POST["color"];
+$time = $_POST["time"];
+$time = (int)$time;
+$dueDate = $_POST["dueDate"];
+$startDate = $_POST["startDate"];
+$startTime = $_POST["startTime"];
+$endTime = $_POST["endTime"];
 
 
-    echo $startTime->diff($endTime)->format('%i second(s)');
+$sqlQuery = "insert into $table (name, username, tag, color, time, duedate, startdate, startTime, endTime) values ";
+$sqlQuery .= "('$name', '$username', '$tag', '$color', $time, '$dueDate', '$startDate', '$startTime', '$endTime')";
+$result = mysqli_query($db, $sqlQuery);
+mysqli_free_result($result);
+?>
 
-    echo $_POST['startTime'] - $_POST['endTime'];
-    echo $_POST['endTime'];
-    ?>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Software</th>
-            <th>Cost</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-    </table>
-
-</div>
-
-</body>
-</html>

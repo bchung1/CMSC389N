@@ -1,36 +1,3 @@
-<?php
-session_start();
-
-$errorMessage = "";
-
-if (isset($_POST["submit"])) {
-//
-//    if ($_POST["name"] == "" || $_POST["startTime"] == "" || $_POST["endTime"] == "" || ($_POST["date"]) == "" || $_POST["tag"] == "") {
-//        $errorMessage = "Please fill out all fields";
-//    }
-//
-//    else {
-//        session_start();
-//        require_once("../util.php");
-//        $loginMessage = "";
-//
-//        $startTime = new DateTime($_POST['startTime']);
-//        $endTime = new DateTime($_POST['endTime']);
-//        $timediff = ($endTime->getTimestamp() - $startTime->getTimestamp()) / 60;
-//
-//        $table = "events";
-//        $db = connectToSchedulerDB();
-//
-//        $sqlQuery = "insert into $table (username, tag, color, timediff, duedate, startdate, startime, endtime) values";
-//        $sqlQuery .= "('{$_SESSION['username']}', '{$_POST['tag']}'), '{$_POST['color']}, '{$timediff}, '{$_POST['date']}', '{$_POST['date']}, '{$_POST['startTime']}, '{$_POST['endTime']}";
-//        $result = mysqli_query($db, $sqlQuery);
-//
-//    }
-
-//    header("Location: newEvent.php");
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,16 +14,15 @@ if (isset($_POST["submit"])) {
     <header>
 <!--      <button class="secondary" style="align-self: flex-start; flex: 0 0 1">Today</button>-->
             <!-- Button to Open the Modal -->
-            <button type="button" class="secondary" style="align-self: flex-start; flex: 0 0 1" onclick="$('#myModal').modal({'backdrop': 'static'});">
+            <button type="button" class="secondary" style="align-self: flex-start; flex: 0 0 1" data-toggle="modal" data-target="#myModal">
                 New Event
             </button>
 
             <!-- The Modal -->
-            <div class="modal fade" id="myModal">
+            <div class="modal fade" id="myModal" data-backdrop="static">
                 <div class="modal-dialog">
                     <div class="modal-content">
 
-                        <form action="calendar2.php" method="post">
                         <!-- Modal Header -->
                         <div class="modal-header">
                             <h4 class="modal-title">Add New Event</h4>
@@ -88,23 +54,19 @@ if (isset($_POST["submit"])) {
                             <select class="form-control col-4" id="tag" name="tag">
                                 <option value="Exam">Exam</option>
                                 <option value="Meeting">Meeting</option>
+                                <option value="Homework">Homework</option>
+                                <option value="Project">Project</option>
+                                <option value="Work">Work</option>
                             </select>
-                            <br>
-
-                            <label for"color>Color</label>
-                            <input type="text" class="form-control col-4" id="color" name="color">
                             <br>
                         </div>
 
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" name="submit" onclick="submitEvent()";>Submit</button>
+                            <div class="message mr-auto"></div>
+                            <button type="button" class="btn btn-primary" name="submit" onclick="submitEvent()";>Submit</button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <?php
-                            echo $errorMessage;
-                            ?>
                         </div>
-                        </form>
 
                     </div>
                 </div>
@@ -117,6 +79,7 @@ if (isset($_POST["submit"])) {
         <div class="icon secondary chevron_right">‹</div>
         <h1 class="" style="flex: 1;"><span></span>
                 <?php
+                date_default_timezone_set('America/New_York');
                 $dateArray = getdate(date("U"));
                 $startDate = "";
                 $endDate = "";

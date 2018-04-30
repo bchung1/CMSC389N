@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once("util.php");
-$loginMessage="";
+require_once("../util.php");
+$loginMessage = "";
 
 $table = "login";
 $db = connectToSchedulerDB();
@@ -12,6 +12,7 @@ if (isset($_POST['submit'])){
     $sqlQuery = "insert into $table (username, password) values";
     $sqlQuery .= "('{$username}', '{$password}')";
     $result = mysqli_query($db, $sqlQuery);
+    mysqli_free_result($result);
     header("Location: loginPage.php");
 }
 
