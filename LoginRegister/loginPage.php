@@ -57,7 +57,7 @@ $form = <<<EOPAGE
                             <input type="password" class="form-control" style="border-radius:0px" id="password" name="password" placeholder="Enter password">
                         </div>
                         <input type="submit" name="submit" class="btn btn-sm btn-default"> &nbsp;
-                        Not a member yet? <a href="../registerPage.php">Register</a> now
+                        Not a member yet? <a href="registerPage.php">Register</a> now
                     </form>
 
 

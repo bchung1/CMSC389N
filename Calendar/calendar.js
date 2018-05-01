@@ -14,6 +14,8 @@ function submitEvent() {
             var end  = new Date(date + " " + endTime);
             var timediff = Math.round((end.getTime() - start.getTime())/60000);
 
+            $('.message').html("Adding event...");
+
             $.ajax({
                 type: 'POST',
                 url: "newEvent.php",
@@ -28,7 +30,6 @@ function submitEvent() {
                 },
                 dataType: "text",
                 success: function(resultData) {
-                    $('.message').html("Adding event...");
                     window.location.replace("calendar2.php");
                 }
             });
