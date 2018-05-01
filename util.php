@@ -9,6 +9,12 @@ function getEvents($db, $username){
 	return $events;
 }
 
+function deleteEvent($db, $username, $name){
+	$events_query = "delete from events where Username = \"".$username."\" and Name = \"".$name."\"";
+	$events = mysqli_query($db, $events_query);
+	return $events_query;
+}
+
 function connectToDB($host, $user, $password, $database) {
 	$db = new mysqli($host, $user, $password, $database);
 	if ($db->connect_errno) {

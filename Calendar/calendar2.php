@@ -1,3 +1,21 @@
+<?php
+session_start();
+require_once("../util.php");
+$table = "users";
+$db = connectToSchedulerDB();
+$image = "";
+$sqlQuery = "SELECT * FROM $table WHERE username='{$_SESSION['username']}'";
+$result = mysqli_query($db, $sqlQuery);
+if ($result) {
+  $recordArray = mysqli_fetch_assoc($result);
+  if ($recordArray) {
+    $image = $recordArray['Image'];
+  }
+} else {
+  $loginMessage = "Retrieving records failed." . mysqli_error($db);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,9 +32,6 @@
     <header>
       <!--      <button class="secondary" style="align-self: flex-start; flex: 0 0 1">Today</button>-->
       <!-- Button to Open the Modal -->
-      <button type="button" class="secondary" style="align-self: flex-start; flex: 0 0 1" data-toggle="modal" data-target="#myModal">
-        New Event
-      </button>
 
       <!-- The Modal -->
       <div class="modal fade" id="myModal" data-backdrop="static">
@@ -29,44 +44,47 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <!-- Modal body -->
-            <div class="modal-body">
-              <label for="name">Event name</label>
-              <input type="text" class="form-control" id="name" name="name">
-              <br>
+            <form id="addEvent">
+              <!-- Modal body -->
+              <div class="modal-body">
+                <label for="name">Event name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+                <br>
 
-              <label for="startTime">Start time</label>
-              <input type="time" class="form-control col-4" id="startTime" name="startTime">
-              <br>
+                <label for="startTime">Start time</label>
+                <input type="time" class="form-control col-4" id="startTime" name="startTime" required>
+                <br>
 
-              <label for="endTime">End time</label>
-              <input type="time" class="form-control col-4" id="endTime" name="endTime">
-              <br>
+                <label for="endTime">End time</label>
+                <input type="time" class="form-control col-4" id="endTime" name="endTime" required>
+                <br>
 
-              <label for="date">Date</label>
-              <input type="date" class="form-control col-5" id="date" name="date">
-              <script>
-              document.getElementById('date').valueAsDate = new Date();
-              </script>
-              <br>
+                <label for="date">Date</label>
+                <input type="date" class="form-control col-5" id="date" name="date" required>
+                <script>
+                document.getElementById('date').valueAsDate = new Date();
+                </script>
+                <br>
 
-              <label for="tag">Tag</label>
-              <select class="form-control col-4" id="tag" name="tag">
-                <option value="Exam">Exam</option>
-                <option value="Meeting">Meeting</option>
-                <option value="Homework">Homework</option>
-                <option value="Project">Project</option>
-                <option value="Work">Work</option>
-              </select>
-              <br>
-            </div>
+                <label for="tag">Tag</label>
+                <select class="form-control col-4" id="tag" name="tag" required>
+                  <option value="Exam">Exam</option>
+                  <option value="Meeting">Meeting</option>
+                  <option value="Homework">Homework</option>
+                  <option value="Project">Project</option>
+                  <option value="Work">Work</option>
+                </select>
+                <br>
+              </div>
 
-            <!-- Modal footer -->
-            <div class="modal-footer">
-              <div class="message mr-auto"></div>
-              <button type="button" class="btn btn-primary" name="submit" onclick="submitEvent()";>Submit</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <div class="message mr-auto"></div>
+                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+
+            </form>
 
           </div>
         </div>
@@ -76,22 +94,23 @@
 
       <div class="calendar__title" style="display: flex; justify-content: center; align-items:
       center">
-      <div class="icon secondary chevron_right">‹</div>
+      <div class="icon secondary chevron_right">
+        <button type="button" class="secondary" style="align-self: flex-start; flex: 0 0 1" data-toggle="modal" data-target="#myModal">
+          New Event
+        </button>
+      </div>
       <h1 class="" style="flex: 1;"><span></span>
         <?php
-        session_start();
         date_default_timezone_set('America/New_York');
         $dateArray = getdate(date("U"));
         $startDate = "";
         $endDate = "";
-
         if ($dateArray["weekday"] == "Sunday") {
           $startDate = strtotime("this sunday");
           $startDate = date('M d', $startDate);
           $endDate = strtotime("this saturday");
           $endDate = date('M d', $endDate);
         }
-
         else {
           $startDate = strtotime("last sunday");
           $startDate = date('M d', $startDate);
@@ -102,7 +121,9 @@
         echo "</strong> $dateArray[year]";
         ?>
       </h1>
-      <div class="icon secondary chevron_left">›</div>
+      <div class="icon secondary chevron_left">
+        <img onclick="logout()" id="image" width="40px" height="40px" style="border-radius: 50%;" src="data:image/jpeg;base64,<?php echo base64_encode($image)?>"/>
+      </div>
     </div>
     <div style="align-self: flex-start; flex: 0 0 1"></div>
   </header>
@@ -117,22 +138,17 @@
           $dateArray = getdate(date("U"));
           $startDate;
           $endDate;
-
           if ($dateArray["weekday"] == "Sunday") {
             $startDate = strtotime("this sunday");
           }
-
           else {
             $startDate = strtotime("last sunday");
           }
-
           echo "<th class=\"headcol\"></th>";
-
           for ($i = 0; $i < 7; $i++) {
             $date = strtotime("+$i day", $startDate);
             $date = date('M d', $date);
             $today = "";
-
             if ($date == date('M d', strtotime("today"))) {
               $today = "class=\"today\"";
             }
@@ -143,7 +159,7 @@
       </thead>
     </table>
 
-    <div class="wrap">
+        <div class="wrap">
       <table class="offset">
 
         <tbody>
@@ -206,7 +222,7 @@ function generateTable(){
       $time_exploded = explode(" ", $time_formatted);
       // $id = $j."_".$time_exploded[0]."_".$time_exploded[1];
       $id = $j."_".$time_military;
-      $event_div = "<td id='".$id."' onclick='a()';'></td>";
+      $event_div = "<td id='".$id."'></td>";
       $event_row = $event_row.$event_div;
     }
     $event_row = $event_row."</tr>";

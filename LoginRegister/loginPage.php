@@ -3,7 +3,7 @@ session_start();
 require_once("../util.php");
 $loginMessage = "";
 
-$table = "login";
+$table = "users";
 $db = connectToSchedulerDB();
 
 if (isset($_POST['submit'])) {
@@ -50,11 +50,11 @@ $form = <<<EOPAGE
                     <form action="loginPage.php" method="post">
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input type="text" class="form-control" style="border-radius:0px" id="username" name="username" placeholder="Enter username">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" style="border-radius:0px" id="password" name="password" placeholder="Enter password">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
                         </div>
                         <input type="submit" name="submit" class="btn btn-sm btn-default"> &nbsp;
                         Not a member yet? <a href="registerPage.php">Register</a> now
