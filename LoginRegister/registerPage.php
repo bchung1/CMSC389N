@@ -30,7 +30,7 @@ $form = <<<EOPAGE
         <div class="panel panel-default">
             <div class="panel-heading"><h3 class="panel-title" id="header">Register</h3></div>
             <div class="panel-body">
-                <form action="{$_SESSION["PHP_SELF"]}" method="post">
+                <form action="registerPage.php" method="post">
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input type="text" class="form-control" style="border-radius:0px" id="username" name="username" placeholder="Enter username">

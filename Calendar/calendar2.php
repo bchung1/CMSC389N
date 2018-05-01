@@ -156,7 +156,7 @@
            $time = strtotime('0:00');
 
            for($i = 1; $i <= 48;$i++){
-             $time_formatted = date("H:i", $time);
+             $time_formatted = date("g:i", $time);
              $event_row = "<tr><td class='headcol'><p style='margin-top: 6px;'>".$time_formatted."</p></td>";
              for($j=0; $j<=6; $j++){
               $event_div = "<td class='cell' onclick='a()'; style='background: white;'></td>";
