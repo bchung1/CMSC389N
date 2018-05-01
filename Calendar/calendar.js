@@ -5,12 +5,50 @@ $(document).ready(function() {
         submitEvent(e);
     });
 
+    $('#editProfile').submit(function (e) {
+        editProfile(e);
+    });
+
+    document.getElementById("logout").addEventListener("click", function() {
+        logout();
+    });
+
 });
 
 function logout() {
+    console.log("logout");
     var confirm = window.confirm("Do you want to logout?");
     if (confirm == true) {
         window.location.replace("../LoginRegister/loginPage.php");
+    }
+}
+
+function editProfile(e) {
+    var firstname = document.getElementById("firstname").value;
+    var lastname = document.getElementById("lastname").value;
+    var password = document.getElementById("password").value;
+    var verify = document.getElementById("verify").value;
+
+    if (password !== verify) {
+        $('.message').html("Passwords don't match");
+        e.preventDefault();
+    }
+
+    else {
+        $.ajax({
+            type: 'POST',
+            url: "editProfile.php",
+            data: {
+                firstname: firstname,
+                lastname: lastname,
+                password: password,
+                verify: verify
+            },
+            dataType: "text",
+            success: function(resultData) {
+                window.location.replace("calendar2.php");
+            }
+        });
     }
 }
 

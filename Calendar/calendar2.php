@@ -4,12 +4,23 @@ require_once("../util.php");
 $table = "users";
 $db = connectToSchedulerDB();
 $image = "";
+$firstname = "";
+$lastname = "";
+$username = "";
+$password = "";
+$verify = "";
+
+
 $sqlQuery = "SELECT * FROM $table WHERE username='{$_SESSION['username']}'";
 $result = mysqli_query($db, $sqlQuery);
 if ($result) {
   $recordArray = mysqli_fetch_assoc($result);
   if ($recordArray) {
     $image = $recordArray['Image'];
+    $firstname = $recordArray['FirstName'];
+    $lastname = $recordArray['LastName'];
+    $username = $recordArray['Username'];
+    $password = $recordArray['Password'];
   }
 } else {
   $loginMessage = "Retrieving records failed." . mysqli_error($db);
@@ -90,6 +101,59 @@ if ($result) {
         </div>
       </div>
 
+        <div class="modal fade" id="editInfo" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit Information</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <form id="editProfile">
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="firstname">First name</label>
+                                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter first name" value="<?php echo $firstname?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname">Last name</label>
+                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter last name" value="<?php echo $lastname?>" required>
+                            </div>
+<!--                            <div class="form-group">-->
+<!--                                <label for="username">Username</label>-->
+<!--                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" value="--><?php //echo $username?><!--" required>-->
+<!--                            </div>-->
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password">
+                            </div>
+                            <div class="form-group">
+                                <label for="verify">Verify password</label>
+                                <input type="password" class="form-control" id="verify" name="verify">
+                            </div>
+<!--                            <div class="form-group">-->
+<!--                                <label for="image">Select profile picture</label>-->
+<!--                                <img data-toggle="modal" data-target="#editInfo" id="image" width="40px" height="40px" style="border-radius: 50%;" src="data:image/jpeg;base64,--><?php //echo base64_encode($image)?><!--"/>-->
+<!--                                <input type="file" id="image" name="image" style="line-height: 10px;">-->
+<!--                            </div>-->
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" name="logout" id="logout" onclick="logout()">Logout</button>
+                            <div class="message mr-auto"></div>
+                            <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
 
 
       <div class="calendar__title" style="display: flex; justify-content: center; align-items:
@@ -122,7 +186,7 @@ if ($result) {
         ?>
       </h1>
       <div class="icon secondary chevron_left">
-        <img onclick="logout()" id="image" width="40px" height="40px" style="border-radius: 50%;" src="data:image/jpeg;base64,<?php echo base64_encode($image)?>"/>
+        <img data-toggle="modal" data-target="#editInfo" id="image" width="40px" height="40px" style="border-radius: 50%;" src="data:image/jpeg;base64,<?php echo base64_encode($image)?>"/>
       </div>
     </div>
     <div style="align-self: flex-start; flex: 0 0 1"></div>
