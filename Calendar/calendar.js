@@ -1,4 +1,4 @@
-var colors = {Exam: "blue", Meeting: "purple", Homework: "green", Project: "red", Work: "pink"};
+var colors = {Exam: "#87CEFA", Meeting: "#FFE4E1", Homework: "#6A5ACD", Project: "#FFA07A", Work: "#FF7F50"};
 
 function submitEvent() {
     var name = document.getElementById("name").value;

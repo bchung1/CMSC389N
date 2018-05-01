@@ -35,16 +35,17 @@ function connectToDB($host, $user, $password, $database) {
 //     return $page;
 // }
 
-function convertDateToNum($date){
+function convertDateToNum($date) {
 	$unixTimestamp = strtotime($date);
 	$dayOfWeek = date("l", $unixTimestamp);
 	$day_num = date('N', strtotime($dayOfWeek));
 	return $day_num;
 }
-function connectToSchedulerDB(){
+
+function connectToSchedulerDB() {
 	$host = "localhost";
-	$user = "dbuser";
-	$password = "cmsc389n";
+	$user = "root";
+	$password = "root";
 	$database = "scheduler";
 	$db = connectToDB($host, $user, $password, $database);
 	return $db;

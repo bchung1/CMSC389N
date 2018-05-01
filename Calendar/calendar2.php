@@ -36,15 +36,15 @@
                             <br>
 
                             <label for="startTime">Start time</label>
-                            <input type="time" class="form-control col-4" id="startTime" name="startTime"">
+                            <input type="time" class="form-control col-4" id="startTime" name="startTime">
                             <br>
 
                             <label for="endTime">End time</label>
-                            <input type="time" class="form-control col-4" id="endTime" name="endTime"">
+                            <input type="time" class="form-control col-4" id="endTime" name="endTime">
                             <br>
 
                             <label for="date">Date</label>
-                            <input type="date" class="form-control col-5" id="date" name="date"">
+                            <input type="date" class="form-control col-5" id="date" name="date">
                             <script>
                                 document.getElementById('date').valueAsDate = new Date();
                             </script>
@@ -79,12 +79,13 @@
         <div class="icon secondary chevron_right">‹</div>
         <h1 class="" style="flex: 1;"><span></span>
                 <?php
+                session_start();
                 date_default_timezone_set('America/New_York');
                 $dateArray = getdate(date("U"));
                 $startDate = "";
                 $endDate = "";
 
-                if ($dateArray[weekday] == "Sunday") {
+                if ($dateArray["weekday"] == "Sunday") {
                     $startDate = strtotime("this sunday");
                     $startDate = date('M d', $startDate);
                     $endDate = strtotime("this saturday");
@@ -117,7 +118,7 @@
               $startDate;
               $endDate;
 
-              if ($dateArray[weekday] == "Sunday") {
+              if ($dateArray["weekday"] == "Sunday") {
                   $startDate = strtotime("this sunday");
               }
 
@@ -147,18 +148,17 @@
 
           <tbody>
            <?php
-           session_start();
            require_once("../util.php");
            $db = connectToSchedulerDB();
            $events = getEvents($db, $_SESSION['username']);
            $day = date('w');
 
-           $time = strtotime('6:00');
+           $time = strtotime('0:00');
 
-           for($i = 1; $i <= 36;$i++){
+           for($i = 1; $i <= 48;$i++){
              $time_formatted = date("H:i", $time);
              $event_row = "<tr><td class='headcol'><p style='margin-top: 6px;'>".$time_formatted."</p></td>";
-             for($j=1; $j<=7; $j++){
+             for($j=0; $j<=6; $j++){
               $event_div = "<td class='cell' onclick='a()'; style='background: white;'></td>";
               // echo $event_div;
               mysqli_data_seek($events, 0);
@@ -167,6 +167,7 @@
                 $dueDate = $row[5];
                 $startTime = $row[7];
                 $endTime = $row[8];
+                $color = $row[3];
                 $dueDateNum = convertDateToNum($dueDate);
                 // echo $dueDate;
                 // echo " ";
@@ -176,8 +177,8 @@
 
                 // echo "Time: ".strtotime($time_formatted)." StartTime: ".strtotime($startTime)." "."EndTime: ".strtotime$endTime);
 
-                if($dueDateNum == $j && strtotime($time_formatted) >= strtotime($startTime) && strtotime($time_formatted) <= strtotime($endTime)){
-                  $event_div = "<td><div class='event'><input id='check' type='checkbox' class='checkbox'/><label for='check'></label>".$name."</div></td>";
+                if($dueDateNum == $j && strtotime($time_formatted) >= strtotime($startTime) && strtotime($time_formatted) < strtotime($endTime)){
+                  $event_div = "<td><div class='event' class='checkbox' style='background: $color;'><input id='check' type='checkbox' class='checkbox'/><label for='check'></label>".$name."</div></td>";
 
                 }
               }
