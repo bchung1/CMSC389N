@@ -57,20 +57,17 @@ INSERT INTO `events` (`Name`, `Username`, `Tag`, `Color`, `Time`, `DueDate`, `St
 -- Table structure for table `login`
 --
 
-CREATE TABLE `login` (
+CREATE TABLE `users` (
+  `FirstName` varchar(30) NOT NULL,
+  `LastName` varchar(30) NOT NULL,
   `Username` varchar(30) NOT NULL,
-  `Password` varchar(60) NOT NULL
+  `Password` varchar(60) NOT NULL,
+  `Image` BLOB NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `login`
 --
-
-INSERT INTO `login` (`Username`, `Password`) VALUES
-('brian', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8'),
-('collin', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8'),
-('jake', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8');
-
 --
 -- Indexes for dumped tables
 --

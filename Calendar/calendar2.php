@@ -1,3 +1,23 @@
+<?php
+session_start();
+require_once("../util.php");
+
+$table = "users";
+$db = connectToSchedulerDB();
+$image = "";
+
+$sqlQuery = "SELECT * FROM $table WHERE username='{$_SESSION['username']}'";
+$result = mysqli_query($db, $sqlQuery);
+if ($result) {
+    $recordArray = mysqli_fetch_assoc($result);
+    if ($recordArray) {
+        $image = $recordArray['Image'];
+    }
+} else {
+    $loginMessage = "Retrieving records failed." . mysqli_error($db);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,9 +34,6 @@
     <header>
 <!--      <button class="secondary" style="align-self: flex-start; flex: 0 0 1">Today</button>-->
             <!-- Button to Open the Modal -->
-            <button type="button" class="secondary" style="align-self: flex-start; flex: 0 0 1" data-toggle="modal" data-target="#myModal">
-                New Event
-            </button>
 
             <!-- The Modal -->
             <div class="modal fade" id="myModal" data-backdrop="static">
@@ -29,29 +46,30 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
 
+                        <form id="addEvent">
                         <!-- Modal body -->
                         <div class="modal-body">
                             <label for="name">Event name</label>
-                            <input type="text" class="form-control" id="name" name="name">
+                            <input type="text" class="form-control" id="name" name="name" required>
                             <br>
 
                             <label for="startTime">Start time</label>
-                            <input type="time" class="form-control col-4" id="startTime" name="startTime">
+                            <input type="time" class="form-control col-4" id="startTime" name="startTime" required>
                             <br>
 
                             <label for="endTime">End time</label>
-                            <input type="time" class="form-control col-4" id="endTime" name="endTime">
+                            <input type="time" class="form-control col-4" id="endTime" name="endTime" required>
                             <br>
 
                             <label for="date">Date</label>
-                            <input type="date" class="form-control col-5" id="date" name="date">
+                            <input type="date" class="form-control col-5" id="date" name="date" required>
                             <script>
                                 document.getElementById('date').valueAsDate = new Date();
                             </script>
                             <br>
 
                             <label for="tag">Tag</label>
-                            <select class="form-control col-4" id="tag" name="tag">
+                            <select class="form-control col-4" id="tag" name="tag" required>
                                 <option value="Exam">Exam</option>
                                 <option value="Meeting">Meeting</option>
                                 <option value="Homework">Homework</option>
@@ -64,9 +82,11 @@
                         <!-- Modal footer -->
                         <div class="modal-footer">
                             <div class="message mr-auto"></div>
-                            <button type="button" class="btn btn-primary" name="submit" onclick="submitEvent()";>Submit</button>
+                            <button type="submit" class="btn btn-primary" name="submit">Submit</button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
+
+                        </form>
 
                     </div>
                 </div>
@@ -76,7 +96,11 @@
 
         <div class="calendar__title" style="display: flex; justify-content: center; align-items:
        center">
-        <div class="icon secondary chevron_right">‹</div>
+        <div class="icon secondary chevron_right">
+            <button type="button" class="secondary" style="align-self: flex-start; flex: 0 0 1" data-toggle="modal" data-target="#myModal">
+                New Event
+            </button>
+        </div>
         <h1 class="" style="flex: 1;"><span></span>
                 <?php
                 session_start();
@@ -102,7 +126,9 @@
                 echo "</strong> $dateArray[year]";
                 ?>
             </h1>
-        <div class="icon secondary chevron_left">›</div>
+        <div class="icon secondary chevron_left">
+            <img onclick="logout()" id="image" width="40px" height="40px" style="border-radius: 50%;" src="data:image/jpeg;base64,<?php echo base64_encode($image)?>"/>
+        </div>
       </div>
       <div style="align-self: flex-start; flex: 0 0 1"></div>
     </header>
@@ -156,8 +182,8 @@
            $time = strtotime('0:00');
 
            for($i = 1; $i <= 48;$i++){
-             $time_formatted = date("g:i", $time);
-             $event_row = "<tr><td class='headcol'><p style='margin-top: 6px;'>".$time_formatted."</p></td>";
+             $time_formatted = date("g:i A", $time);
+             $event_row = "<tr><td class='headcol'><p style='margin-top: 6px; font-size: 11px;'>".$time_formatted."</p></td>";
              for($j=0; $j<=6; $j++){
               $event_div = "<td class='cell' onclick='a()'; style='background: white;'></td>";
               // echo $event_div;
